@@ -1,2 +1,2 @@
 # cdp-environments
-Demo configuraiton for non-prod CDP environments
+Demo configuration for non-prod CDP environments
