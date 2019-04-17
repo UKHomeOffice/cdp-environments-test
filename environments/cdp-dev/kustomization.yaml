@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - cdp-deployment-templates/k8s-template/tinkerpop-graphdb-schema-loader.yaml
+  - cdp-deployment-templates/k8s-template/elasticsearch.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: tinkerpop-graphdb-schema-loader
+    files:
+      - cdp-deployment-templates/conf-template/graphdb/persona/schema-loader/gremlin-server.yml
+      - cdp-deployment-templates/conf-template/graphdb/persona/schema-loader/graph-schema.json
+      - cdp-deployment-templates/conf-template/graphdb/common/janusgraph-dynamodb.properties
+
+# secretGenerator used to push AWS creds to k8s on the command line
+# when running from Drone, assuming the secret has already been created
+# secretGenerator:
+#   - name: tinkerpop-graphdb
+#     type: Opaque
+#     env: awscreds.txt
+

@@ -1,0 +1,62 @@
+matrix:
+  DEFAULT_ENVIRONMENT:
+    - cdp-dev
+    # - cdp-sys
+  SLACK_NOTICE_CHANNEL_SUCCESS:
+    - cdp-deploy-success
+  SLACK_NOTICE_CHANNEL_FAILURE:
+    - cdp-deploy-failure
+  SLACK_NOTICE_ICON:
+    - https://avatars.slack-edge.com/2019-03-25/588775175286_f3831480e0ca04ab5358_48.png
+  SLACK_NOTICE_USERNAME:
+    - Drone
+
+pipeline:
+  deploy:
+    image: quay.io/ukhomeofficedigital/cdp-ci:0.3.0
+    secrets:
+      - kube_token
+      - github_ssh_key_cdp_deploy
+    commands:
+      - export DEPLOY_TO="${DEPLOY_TO:-${DEFAULT_ENVIRONMENT}}"
+      - ./deploy.sh
+    when:
+      event: push
+      branch: [master]
+
+  notify_slack_success_push:
+    image: plugins/slack:1.2
+    secrets:
+      - source: "slack_webhook_cdp_deploy_success"
+        target: slack_webhook
+    channel: ${SLACK_NOTICE_CHANNEL_SUCCESS}
+    username: ${SLACK_NOTICE_USERNAME}
+    icon_url: ${SLACK_NOTICE_ICON}
+    template: >
+      *Deployed to ${DEFAULT_ENVIRONMENT} * - <{{build.link}}|#{{build.number}}>
+    when:
+      branch: [master]
+      event: push
+      status: success
+
+  notify_slack_failure_push:
+    image: plugins/slack:1.2
+    secrets:
+      - source: "slack_webhook_cdp_deploy_failure"
+        target: slack_webhook
+    channel: ${SLACK_NOTICE_CHANNEL_FAILURE}
+    username: ${SLACK_NOTICE_USERNAME}
+    icon_url: ${SLACK_NOTICE_ICON}
+    template: >
+      *Failed to deploy to ${DEFAULT_ENVIRONMENT}*
+
+      Author: {{build.author}}
+
+      Duration: {{since job.started}}
+      Job: <{{build.link}}|#{{build.number}}>
+
+      Commit: {{build.commit}}
+    when:
+      branch: [master]
+      event: push
+      status: failure
