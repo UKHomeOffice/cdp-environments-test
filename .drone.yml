@@ -28,7 +28,7 @@ pipeline:
       - kube_token
       - github_ssh_key_cdp_deploy
     commands:
-      - export DEPLOY_TO="${DEPLOY_TO:-${DEFAULT_ENVIRONMENT}}"
+      - export DEPLOY_TO="${DEFAULT_ENVIRONMENT}"
       - deploy.sh . ${DEPLOY_TO}
     when:
       # repo:
