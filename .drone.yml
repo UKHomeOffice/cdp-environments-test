@@ -36,39 +36,39 @@ pipeline:
       event: push
       branch: [master, CDMP-2264]
 
-  notify_slack_success_push:
-    image: plugins/slack:1.2
-    secrets:
-      - source: "slack_webhook_cdp_deploy_success"
-        target: slack_webhook
-    channel: ${SLACK_NOTICE_CHANNEL_SUCCESS}
-    username: ${SLACK_NOTICE_USERNAME}
-    icon_url: ${SLACK_NOTICE_ICON}
-    template: >
-      *Deployed to ${DEFAULT_ENVIRONMENT} * - <{{build.link}}|#{{build.number}}>
-    when:
-      branch: [master]
-      event: push
-      status: success
+  # notify_slack_success_push:
+  #   image: plugins/slack:1.2
+  #   secrets:
+  #     - source: "slack_webhook_cdp_deploy_success"
+  #       target: slack_webhook
+  #   channel: ${SLACK_NOTICE_CHANNEL_SUCCESS}
+  #   username: ${SLACK_NOTICE_USERNAME}
+  #   icon_url: ${SLACK_NOTICE_ICON}
+  #   template: >
+  #     *Deployed to ${DEFAULT_ENVIRONMENT} * - <{{build.link}}|#{{build.number}}>
+  #   when:
+  #     branch: [master]
+  #     event: push
+  #     status: success
 
-  notify_slack_failure_push:
-    image: plugins/slack:1.2
-    secrets:
-      - source: "slack_webhook_cdp_deploy_failure"
-        target: slack_webhook
-    channel: ${SLACK_NOTICE_CHANNEL_FAILURE}
-    username: ${SLACK_NOTICE_USERNAME}
-    icon_url: ${SLACK_NOTICE_ICON}
-    template: >
-      *Failed to deploy to ${DEFAULT_ENVIRONMENT}*
+  # notify_slack_failure_push:
+  #   image: plugins/slack:1.2
+  #   secrets:
+  #     - source: "slack_webhook_cdp_deploy_failure"
+  #       target: slack_webhook
+  #   channel: ${SLACK_NOTICE_CHANNEL_FAILURE}
+  #   username: ${SLACK_NOTICE_USERNAME}
+  #   icon_url: ${SLACK_NOTICE_ICON}
+  #   template: >
+  #     *Failed to deploy to ${DEFAULT_ENVIRONMENT}*
 
-      Author: {{build.author}}
+  #     Author: {{build.author}}
 
-      Duration: {{since job.started}}
-      Job: <{{build.link}}|#{{build.number}}>
+  #     Duration: {{since job.started}}
+  #     Job: <{{build.link}}|#{{build.number}}>
 
-      Commit: {{build.commit}}
-    when:
-      branch: [master]
-      event: push
-      status: failure
+  #     Commit: {{build.commit}}
+  #   when:
+  #     branch: [master]
+  #     event: push
+  #     status: failure
