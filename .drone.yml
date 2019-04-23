@@ -26,9 +26,10 @@ pipeline:
     image: quay.io/ukhomeofficedigital/cdp-ci:0.4.1
     secrets:
       - kube_token
-      - github_ssh_key_cdp_deploy
+      - kube_server
+      # - github_ssh_key_cdp_deploy
     commands:
-      - deploy.sh . ${DEFAULT_ENVIRONMENT}
+      - export KUBE_SERVER=${KUBE_SERVER} && deploy.sh . ${DEFAULT_ENVIRONMENT}
     when:
       # repo:
       #   - github.com/UKHomeOffice/cdp-deployment-templates
