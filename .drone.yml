@@ -12,6 +12,16 @@ matrix:
     - Drone
 
 pipeline:
+  deploy-to-cdp-dev:
+    image: quay.io/ukhomeofficedigital/cdp-ci:0.4.1
+    secrets:
+      - kube_token
+      - github_ssh_key_cdp_deploy
+    commands:
+      - deploy.sh . ${DRONE_DEPLOY_TO}
+    when:
+      event: deployment
+
   deploy:
     image: quay.io/ukhomeofficedigital/cdp-ci:0.4.1
     secrets:
@@ -21,8 +31,8 @@ pipeline:
       - export DEPLOY_TO="${DEPLOY_TO:-${DEFAULT_ENVIRONMENT}}"
       - ./deploy.sh
     when:
-      repo:
-        - github.com/UKHomeOffice/cdp-deployment-templates
+      # repo:
+      #   - github.com/UKHomeOffice/cdp-deployment-templates
       event: push
       branch: [master, CDMP-2264]
 
