@@ -28,8 +28,7 @@ pipeline:
       - kube_token
       - github_ssh_key_cdp_deploy
     commands:
-      - export DEPLOY_TO="${DEFAULT_ENVIRONMENT}"
-      - deploy.sh . ${DEPLOY_TO}
+      - deploy.sh . ${DEFAULT_ENVIRONMENT}
     when:
       # repo:
       #   - github.com/UKHomeOffice/cdp-deployment-templates
