@@ -13,7 +13,7 @@ matrix:
 
 pipeline:
   deploy:
-    image: quay.io/ukhomeofficedigital/cdp-ci:0.3.0
+    image: quay.io/ukhomeofficedigital/cdp-ci:0.4.1
     secrets:
       - kube_token
       - github_ssh_key_cdp_deploy
@@ -21,8 +21,10 @@ pipeline:
       - export DEPLOY_TO="${DEPLOY_TO:-${DEFAULT_ENVIRONMENT}}"
       - ./deploy.sh
     when:
+      repo:
+        - github.com/UKHomeOffice/cdp-deployment-templates
       event: push
-      branch: [master]
+      branch: [master, CDMP-2264]
 
   notify_slack_success_push:
     image: plugins/slack:1.2
