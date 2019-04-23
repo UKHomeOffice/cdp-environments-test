@@ -29,7 +29,7 @@ pipeline:
       - github_ssh_key_cdp_deploy
     commands:
       - export DEPLOY_TO="${DEPLOY_TO:-${DEFAULT_ENVIRONMENT}}"
-      - ./deploy.sh
+      - deploy.sh . ${DEPLOY_TO}
     when:
       # repo:
       #   - github.com/UKHomeOffice/cdp-deployment-templates
