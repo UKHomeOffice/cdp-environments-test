@@ -36,9 +36,9 @@ pipeline:
     environment:
       - KUBE_FOO=foo
     commands:
-      - echo 1 $${KUBE_FOO}
-      - echo 2 ${KUBE_FOO}
-      - export KUBE_FOO=$${KUBE_FOO}
+      - echo 1 KUBE_FOO=$${KUBE_FOO}
+      - echo 2 KUBE_FOO=${KUBE_FOO}
+      - echo 3 KUBE_SERVER=$${KUBE_SERVER}
       - kubectl --server $${KUBE_SERVER} --token $${KUBE_TOKEN} get pods
       # - deploy.sh . ${DEFAULT_ENVIRONMENT}
       # - export KUBE_SERVER=${KUBE_SERVER} && deploy.sh . ${DEFAULT_ENVIRONMENT}
