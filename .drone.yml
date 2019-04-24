@@ -10,12 +10,10 @@ matrix:
     - https://avatars.slack-edge.com/2019-03-25/588775175286_f3831480e0ca04ab5358_48.png
   SLACK_NOTICE_USERNAME:
     - Drone
-  DOCKER_CDP_CI_IMAGE:
-    - 0.4.2
 
 pipeline:
-  deploy-to-cdp-dev:
-    image: quay.io/ukhomeofficedigital/cdp-ci:${DOCKER_CDP_CI_IMAGE}
+  deploy:
+    image: quay.io/ukhomeofficedigital/cdp-ci
     secrets:
       - kube_token
       - kube_server
@@ -23,32 +21,10 @@ pipeline:
       # - github_ssh_key_cdp_deploy
     commands:
       # DRONE_DEPLOY_TO is set by the drone-trigger plugin
-      - deploy.sh . ${DRONE_DEPLOY_TO}
+      - deploy.sh . $${DRONE_DEPLOY_TO:-${DEFAULT_ENVIRONMENT}}
     when:
-      event: deployment
-      branch: master
-
-  deploy:
-    image: quay.io/ukhomeofficedigital/cdp-ci:${DOCKER_CDP_CI_IMAGE}
-    secrets:
-      - kube_token
-      - kube_server
-      - kube_certificate_authority_data
-      # - github_ssh_key_cdp_deploy
-    environment:
-      - KUBE_FOO=foo
-    commands:
-      - echo 1 KUBE_FOO=$${KUBE_FOO}
-      - echo 2 KUBE_FOO=${KUBE_FOO}
-      - echo 3 KUBE_SERVER=$${KUBE_SERVER}
-      - echo $${KUBE_CERTIFICATE_AUTHORITY_DATA} | base64 -d > $$HOME/kube_ca.txt
-      - kubectl get pods --server=$${KUBE_SERVER} --token=$${KUBE_TOKEN} --namespace=${DEFAULT_ENVIRONMENT} --certificate-authority=$$HOME/kube_ca.txt
-      - deploy.sh . ${DEFAULT_ENVIRONMENT}
-    when:
-      # repo:
-      #   - github.com/UKHomeOffice/cdp-deployment-templates
-      event: push
-      branch: [master, CDMP-2264]
+      event: [deployment, push]
+      branch: [master, develop]
 
   # notify_slack_success_push:
   #   image: plugins/slack:1.2
