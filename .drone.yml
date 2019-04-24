@@ -33,7 +33,7 @@ pipeline:
       - kube_token
       - kube_server
       # - github_ssh_key_cdp_deploy
-    environments:
+    environment:
       - KUBE_FOO=foo
     commands:
       - echo ${KUBE_FOO}
