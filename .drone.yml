@@ -36,8 +36,8 @@ pipeline:
     environment:
       - KUBE_FOO=foo
     commands:
-      - echo ${KUBE_FOO}
-      - export KUBE_FOO=${KUBE_FOO}
+      - echo $${KUBE_FOO}
+      - export KUBE_FOO=$${KUBE_FOO}
       - export KUBE_SERVER=${kube_server}
       - export KUBE_TOKEN=${kube_token}
       - kubectl get pods
