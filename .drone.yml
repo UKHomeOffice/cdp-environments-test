@@ -34,6 +34,7 @@ pipeline:
       - kube_server
       # - github_ssh_key_cdp_deploy
     commands:
+      - kubectl get pods
       - deploy.sh . ${DEFAULT_ENVIRONMENT}
       # - export KUBE_SERVER=${KUBE_SERVER} && deploy.sh . ${DEFAULT_ENVIRONMENT}
     when:
