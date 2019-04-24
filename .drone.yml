@@ -38,10 +38,10 @@ pipeline:
     commands:
       - echo $${KUBE_FOO}
       - export KUBE_FOO=$${KUBE_FOO}
-      - export KUBE_SERVER=${kube_server}
-      - export KUBE_TOKEN=${kube_token}
+      - export KUBE_SERVER=$${KUBE_SERVER}
+      - export KUBE_TOKEN=$${KUBE_TOKEN}
       - kubectl get pods
-      - deploy.sh . ${DEFAULT_ENVIRONMENT}
+      # - deploy.sh . ${DEFAULT_ENVIRONMENT}
       # - export KUBE_SERVER=${KUBE_SERVER} && deploy.sh . ${DEFAULT_ENVIRONMENT}
     when:
       # repo:
