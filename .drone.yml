@@ -19,6 +19,7 @@ pipeline:
     secrets:
       - kube_token
       - kube_server
+      - kube_certificate_authority_data
       # - github_ssh_key_cdp_deploy
     commands:
       # DRONE_DEPLOY_TO is set by the drone-trigger plugin
@@ -32,6 +33,7 @@ pipeline:
     secrets:
       - kube_token
       - kube_server
+      - kube_certificate_authority_data
       # - github_ssh_key_cdp_deploy
     environment:
       - KUBE_FOO=foo
@@ -39,7 +41,8 @@ pipeline:
       - echo 1 KUBE_FOO=$${KUBE_FOO}
       - echo 2 KUBE_FOO=${KUBE_FOO}
       - echo 3 KUBE_SERVER=$${KUBE_SERVER}
-      - kubectl get pods --server=$${KUBE_SERVER} --token=$${KUBE_TOKEN} --namespace=${DEFAULT_ENVIRONMENT} --insecure-skip-tls-verify
+      - echo ${KUBE_CERTIFICATE_AUTHORITY_DATA} | base64 -d > $$HOME/kube_ca.txt
+      - kubectl get pods --server=$${KUBE_SERVER} --token=$${KUBE_TOKEN} --namespace=${DEFAULT_ENVIRONMENT} --certificate-authority=$$HOME/kube_ca.txt
       - deploy.sh . ${DEFAULT_ENVIRONMENT}
     when:
       # repo:
