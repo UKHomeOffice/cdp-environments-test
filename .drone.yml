@@ -36,6 +36,7 @@ pipeline:
     environment:
       - KUBE_FOO=foo
     commands:
+      - env
       - echo $${KUBE_FOO}
       - export KUBE_FOO=$${KUBE_FOO}
       - export KUBE_SERVER=$${KUBE_SERVER}
